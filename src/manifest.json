@@ -1,0 +1,21 @@
+{
+    "manifest_version": 3,
+    "name": "Salesforce: Deployed Components",
+    "version": "1.0",
+    "description": "Adds a list of Component Successes to the Deployment Details page",
+
+    "content_scripts": [
+        {
+            "matches": [
+                "https://*.salesforce.com/changemgmt/monitorDeploymentsDetails.apexp?*asyncId=*",
+                "https://*.salesforce-setup.com/changemgmt/monitorDeploymentsDetails.apexp?*asyncId=*"
+            ],
+            "js": ["content.js"],
+            "css": ["styles.css"],
+            "all_frames": true
+        }
+    ],
+    "icons": {
+        "128": "icons/icon128.png"
+    }
+}
