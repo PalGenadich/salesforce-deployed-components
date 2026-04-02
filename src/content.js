@@ -55,8 +55,9 @@ function jsonToTable(data) {
 
     const headers = [
         "id",
-        "componentType",
+        "State",
         "fullName",
+        "componentType",
         "fileName",
         // "problemType",
         // "problem",
@@ -94,9 +95,12 @@ function jsonToTable(data) {
         headers.forEach((h, index) => {
             const td = document.createElement("td");
             td.classList.add("dataCell");
-            // Linkify the record Id column
             if (index == 0 && row[h]) {
+                // Linkify the record Id column
                 td.innerHTML = `<a href="/${row[h]}">${row[h]}</a>`;
+            } else if (index == 1) {
+                // Calculate the State column
+                td.textContent = getState(row);
             } else {
                 td.textContent = row[h];
             }
@@ -124,6 +128,19 @@ function camelToSentence(text) {
         .trim();
 
     return result.charAt(0).toUpperCase() + result.slice(1);
+}
+
+function getState(row) {
+    if (row.created) {
+        return "Created";
+    } else if (row.deleted) {
+        return "Deleted";
+    } else if (row.changed) {
+        return "Changed";
+    } else if (!row.success) {
+        return "Failed";
+    }
+    return "Unchanged";
 }
 
 injectHTML();

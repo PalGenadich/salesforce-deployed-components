@@ -1,7 +1,7 @@
 {
     "manifest_version": 3,
     "name": "Salesforce: Deployed Components",
-    "version": "1.0",
+    "version": "1.0.1",
     "description": "Adds a list of Component Successes to the Deployment Details page",
 
     "content_scripts": [
