@@ -1,3 +1,5 @@
 ﻿.sfdx
 .prettierrc
 *sample*.json
+*.ini
+settings.local.json
