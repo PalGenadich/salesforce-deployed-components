@@ -22,12 +22,12 @@ async function injectHTML() {
 
     const result = data?.deployResult;
     let rows = result?.details?.componentSuccesses;
-    const AreComponentsActuallyCreated = !result.checkOnly && result.done && result.success;
+    const AreComponentsActuallyChanged = !result.checkOnly && result.done && result.success;
     if (!rows) return;
     rows = rows.filter((row) => row.fullName !== "package.xml" && !(row.fullName === "destructiveChanges.xml" && row.problemType === "Warning"));
     if (rows.length < 1) return;
 
-    const table = jsonToTable(rows, AreComponentsActuallyCreated);
+    const table = jsonToTable(rows, AreComponentsActuallyChanged);
     if (!table) return;
     target.appendChild(table);
 
@@ -172,7 +172,7 @@ function getCookie(name) {
     return null;
 }
 
-function jsonToTable(data, AreComponentsActuallyCreated) {
+function jsonToTable(data, AreComponentsActuallyChanged) {
     if (!data || !data.length) return null;
 
     const page = document.createElement("div");
@@ -233,7 +233,7 @@ function jsonToTable(data, AreComponentsActuallyCreated) {
         headers.forEach((h, colIndex) => {
             const td = document.createElement("td");
             td.classList.add("dataCell");
-            if (colIndex === 0 && ((row.created && AreComponentsActuallyCreated) || !row.created)) {
+            if (colIndex === 0 && (!row.created || AreComponentsActuallyChanged) && (!row.deleted || !AreComponentsActuallyChanged)) {
                 // Linkify the record Id column; data-row-index allows async href updates via updateLinks()
                 const link = getLinkForRow(row);
                 if (link) {
