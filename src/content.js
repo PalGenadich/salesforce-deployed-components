@@ -1,4 +1,4 @@
-const SF_API_VERSION = "v66.0";
+const SF_API_VERSION = "v67.0";
 
 let objectIdMap = {};
 let omniStudioIdMap = {};
@@ -40,7 +40,7 @@ async function injectHTML() {
 
 async function fetchDeploymentData(asyncId, sid) {
     try {
-        const res = await fetch(`/services/data/${SF_API_VERSION}/metadata/deployRequest/${asyncId}?includeDetails=true`, {
+        const res = await fetch(`${getOrigin()}/services/data/${SF_API_VERSION}/metadata/deployRequest/${asyncId}?includeDetails=true`, {
             headers: {
                 Authorization: "Bearer " + sid,
             },
@@ -55,7 +55,7 @@ async function fetchDeploymentData(asyncId, sid) {
 async function fetchObjectIdMap(sid) {
     const query = encodeURIComponent("SELECT QualifiedApiName, DurableId, KeyPrefix FROM EntityDefinition WHERE DurableId LIKE '0%'");
     try {
-        const res = await fetch(`/services/data/${SF_API_VERSION}/tooling/query?q=${query}`, {
+        const res = await fetch(`${getOrigin()}/services/data/${SF_API_VERSION}/tooling/query?q=${query}`, {
             headers: {
                 Authorization: "Bearer " + sid,
             },
@@ -124,7 +124,7 @@ async function fetchOmniStudioIds(sid, rows) {
 
 async function soqlQuery(sid, soql) {
     try {
-        const res = await fetch(`/services/data/${SF_API_VERSION}/query?q=${encodeURIComponent(soql)}`, {
+        const res = await fetch(`${getOrigin()}/services/data/${SF_API_VERSION}/query?q=${encodeURIComponent(soql)}`, {
             headers: { Authorization: "Bearer " + sid },
         });
         if (!res.ok) return [];
@@ -170,6 +170,10 @@ function getCookie(name) {
         }
     }
     return null;
+}
+
+function getOrigin() {
+    return window.location.origin.replace(`salesforce-setup`, `salesforce`);
 }
 
 function jsonToTable(data, AreComponentsActuallyChanged) {
